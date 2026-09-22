@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Elegant & minimal palette */
+  --cream: #fdfbf7;
+  --cream-deep: #f6f1e7;
+  --ink: #3a3a38;
+  --ink-soft: #6b6a64;
+  --gold: #c9a24b;
+  --gold-soft: #e3cf9d;
+  --sage: #9caf88;
+  --paper: #fffdf9;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-sage: var(--sage);
+  --color-paper: var(--paper);
+  --font-serif: var(--font-serif);
+  --font-hebrew: var(--font-hebrew);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-serif), Georgia, serif;
+  /* Prevent horizontal scroll from decorative florals */
+  overflow-x: hidden;
+}
+
+/* Soft radial vignette behind the whole scene */
+.scene-bg {
+  background:
+    radial-gradient(
+      120% 90% at 50% 30%,
+      var(--paper) 0%,
+      var(--cream) 45%,
+      var(--cream-deep) 100%
+    );
+}
+
+.font-hebrew {
+  font-family: var(--font-hebrew), var(--font-serif), serif;
+}
+
+/* Gentle idle float for the closed envelope */
+@keyframes envFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
   }
 }
+.env-float {
+  animation: envFloat 4.6s ease-in-out infinite;
+}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }
