@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAnimate, useReducedMotion } from "motion/react";
 import { InvitationCard } from "./InvitationCard";
+import { content } from "@/lib/content";
 
 // ── Geometry (px) ──────────────────────────────────────────────
 const W = 340; // envelope width
@@ -11,11 +12,11 @@ const POCKET = 132; // front-pocket height (masks the card = "inside")
 const CW = 308; // invitation card width
 
 const STAGE_W = 440; // extra width so the card's soft shadow isn't clipped
-const STAGE_H = 820; // fits the ~727px card centered, with room for the close control
+const STAGE_H = 930; // fits the tall Shoval & Daniel card centered, with room for the close control
 
 const ENV_TOP = STAGE_H - H; // envelope sits at the bottom of the stage
 const MOUTH = ENV_TOP + (H - POCKET); // y of the pocket's top edge (the opening)
-const CARD_TOP = 46; // card's resting top → roughly centered in the stage
+const CARD_TOP = 40; // card's resting top → roughly centered in the stage
 const SLIDE_D = MOUTH - CARD_TOP + 44; // how far down the card starts (hidden inside)
 const STAGE_SHIFT = ENV_TOP + H / 2 - STAGE_H / 2; // shift so the *envelope* is centered when closed
 const CLIP_BOTTOM = STAGE_H - MOUTH; // clip everything below the mouth while emerging
@@ -277,8 +278,24 @@ export function Envelope() {
                   boxShadow: "0 4px 10px -2px rgba(120,90,30,0.55)",
                 }}
               >
-                <span className="font-serif text-lg leading-none">D&amp;N</span>
+                <span className="font-display text-base font-medium leading-none tracking-tight">
+                  {content.envelope.monogram}
+                </span>
               </div>
+
+              {/* couple's name in gold calligraphy on the pocket */}
+              <p
+                className="env-part absolute w-full text-center font-script text-gold"
+                style={{
+                  top: ENV_TOP + H - 50,
+                  fontSize: 27,
+                  lineHeight: 1,
+                  zIndex: 22,
+                  pointerEvents: "none",
+                }}
+              >
+                {content.envelope.script}
+              </p>
 
               {/* invisible click target over the closed envelope */}
               {phase === "closed" && (

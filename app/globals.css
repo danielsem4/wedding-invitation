@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  /* Elegant & minimal palette */
-  --cream: #fdfbf7;
-  --cream-deep: #f6f1e7;
-  --ink: #3a3a38;
-  --ink-soft: #6b6a64;
-  --gold: #c9a24b;
-  --gold-soft: #e3cf9d;
+  /* Warm ivory / champagne-linen palette */
+  --cream: #f7f1e6;
+  --cream-deep: #ece0cc;
+  --ink: #302e29;
+  --ink-soft: #6b6459;
+  --gold: #b8912f;
+  --gold-soft: #e0c88f;
   --sage: #9caf88;
-  --paper: #fffdf9;
+  --paper: #fffdf8;
 }
 
 @theme inline {
@@ -23,6 +23,8 @@
   --color-paper: var(--paper);
   --font-serif: var(--font-serif);
   --font-hebrew: var(--font-hebrew);
+  --font-display: var(--font-display);
+  --font-script: var(--font-script);
 }
 
 html,
@@ -34,19 +36,33 @@ body {
   overflow-x: hidden;
 }
 
-/* Soft radial vignette behind the whole scene */
+/* Warm champagne-linen backdrop: a soft diagonal shaft of window light
+   over a radial vignette, evoking the flat-lay's natural sunlight. */
 .scene-bg {
   background:
+    linear-gradient(
+      135deg,
+      rgba(255, 253, 248, 0.55) 0%,
+      rgba(255, 253, 248, 0) 42%
+    ),
     radial-gradient(
-      120% 90% at 50% 30%,
+      120% 90% at 50% 28%,
       var(--paper) 0%,
-      var(--cream) 45%,
+      var(--cream) 46%,
       var(--cream-deep) 100%
     );
 }
 
 .font-hebrew {
   font-family: var(--font-hebrew), var(--font-serif), serif;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-serif), Georgia, serif;
+}
+
+.font-script {
+  font-family: var(--font-script), "Segoe Script", cursive;
 }
 
 /* Gentle idle float for the closed envelope */

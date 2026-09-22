@@ -1,43 +1,57 @@
 // ─────────────────────────────────────────────────────────────
 //  WEDDING DETAILS — edit everything here. No other file needs to change.
-//  Each field has a Hebrew (he) and English (en) version.
+//  Hebrew is the primary language; keep every string exactly as written
+//  (nikud, gershayim ״, geresh ׳, and ז״ל are intentional — do not "fix" them).
 // ─────────────────────────────────────────────────────────────
 
 export const content = {
-  // The couple's names
-  couple: {
-    he: "דניאל & נועה", //           <-- EDIT: bride & groom (Hebrew)
-    en: "Daniel & Noa", //           <-- EDIT: bride & groom (English)
-  },
+  // Small blessing in the upper-right corner
+  bsd: "בס״ד",
 
-  // A short line inviting guests
-  invite: {
-    he: "מתכבדים להזמינכם לחגוג עמנו את יום נישואינו", // <-- EDIT
-    en: "Together with their families, invite you to celebrate their wedding", // <-- EDIT
-  },
+  // Opening verse (Song of Songs 3:4) — one elegant line at the top of the card
+  verse: "עַד שֶׁמָּצָאתִי אֵת שֶׁאָהֲבָה נַפְשִׁי אֲחַזְתִּיו וְלֹא אַרְפֶּנּוּ",
 
-  // Date
-  date: {
-    he: "יום חמישי, 25 ביוני 2026", //  <-- EDIT
-    en: "Thursday, June 25, 2026", //   <-- EDIT
-  },
+  // The couple — the visual centerpiece (large uppercase serif)
+  namesEn: "SHOVAL & DANIEL",
+  subtitleEn: "are getting married", // delicate handwritten script
 
-  // Time
-  time: {
-    he: "קבלת פנים בשעה 19:00", //      <-- EDIT
-    en: "Reception at 7:00 PM", //      <-- EDIT
-  },
+  // Invitation body (two Hebrew lines)
+  invite: [
+    "שמחים ונרגשים להזמינכם לחגוג עמנו את יום נישואינו",
+    "שיתקיים אי״ה ביום רביעי, כ״ה בחשוון תשפ״ז",
+  ],
 
-  // Venue name + location
+  // Wedding date — shown prominently
+  date: "04.11.2026",
+
+  // Venue
   venue: {
-    he: "אולמי גן ורדים, ראשון לציון", // <-- EDIT
-    en: "Gan Vradim, Rishon LeZion", //   <-- EDIT
+    name: "ADIA | עדיה",
+    place: "אולם עדיה, יבנה",
   },
 
-  // Small closing note shown at the bottom of the card
-  closing: {
-    he: "נשמח לראותכם",  //             <-- EDIT
-    en: "We can't wait to celebrate with you", // <-- EDIT
+  // Event times — kept on one balanced line
+  times: "קבלת פנים 19:30  |  חופה וקידושין 20:30",
+
+  // Closing note
+  closing: "בשמחה לראותכם",
+
+  // Parents — two balanced columns (right = bride, left = groom)
+  parents: {
+    bride: {
+      label: "הורי הכלה",
+      names: ["עמליה גיברי", "אמיר גיברי ז״ל"],
+    },
+    groom: {
+      label: "הורי החתן",
+      names: ["תמי לוי", "אלכסנדר סמריגאן"],
+    },
+  },
+
+  // Envelope face
+  envelope: {
+    monogram: "S&D",       // intertwined gold monogram
+    script: "Shoval & Daniel", // gold calligraphy under the monogram
   },
 } as const;
 
