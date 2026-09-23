@@ -1,13 +1,35 @@
 import { content } from "@/lib/content";
-import { FloralSprig } from "./Florals";
 
-/** A small gold divider with a center diamond. */
-function Divider() {
+// Royal-blue palette for this clean, minimal card. Kept local (Tailwind
+// arbitrary values) so the surrounding envelope's own tokens are untouched.
+const BLUE = "#2b3f9c"; // primary — names, frame, monogram, headings
+const BLUE_SOFT = "#7181b3"; // muted slate-blue — subtitle & secondary lines
+
+/** Title-case a possibly ALL-CAPS name for the script display face. */
+const titleCase = (s: string) =>
+  s.toLowerCase().replace(/(^|\s)\p{L}/gu, (c) => c.toUpperCase());
+
+/** The couple's initials inside a thin vertical oval — the crowning mark. */
+function Monogram({ monogram }: { monogram: string }) {
+  const initials = monogram.replace(/[^\p{L}]/gu, ""); // "D&S" → "DS"
   return (
-    <div className="flex items-center justify-center gap-3 py-0.5">
-      <span className="h-px w-10 bg-gold/50 sm:w-14" />
-      <span className="rotate-45 text-gold text-[9px] leading-none">◆</span>
-      <span className="h-px w-10 bg-gold/50 sm:w-14" />
+    <div className="relative flex items-center justify-center" style={{ width: 120, height: 150 }}>
+      <svg
+        width={120}
+        height={150}
+        viewBox="0 0 120 150"
+        fill="none"
+        aria-hidden="true"
+        className="absolute inset-0"
+      >
+        <ellipse cx="60" cy="75" rx="47" ry="66" stroke={BLUE} strokeWidth="1" />
+      </svg>
+      <span
+        className="font-script leading-none"
+        style={{ color: BLUE, fontSize: "3.6rem" }}
+      >
+        {initials}
+      </span>
     </div>
   );
 }
@@ -16,9 +38,11 @@ function Divider() {
 function ParentColumn({ label, names }: { label: string; names: readonly string[] }) {
   return (
     <div className="flex-1">
-      <p className="text-[12px] font-medium tracking-wide text-ink">{label}</p>
+      <p className="text-[13px] font-semibold tracking-wide" style={{ color: BLUE }}>
+        {label}
+      </p>
       {names.map((name, i) => (
-        <p key={i} className="mt-1 text-[12px] leading-snug text-ink-soft">
+        <p key={i} className="mt-1.5 text-[12.5px] leading-snug" style={{ color: BLUE_SOFT }}>
           {name}
         </p>
       ))}
@@ -30,107 +54,107 @@ function ParentColumn({ label, names }: { label: string; names: readonly string[
  * The invitation content — rendered statically (already "printed" on the card).
  * The reveal comes from the card physically sliding out of the envelope.
  *
- * Hebrew-primary; English appears only for the couple's names, the script
- * subtitle, and "ADIA". Every Hebrew line is set `dir="rtl"` so the browser
- * lays it out correctly — never reversed by hand.
+ * A clean, minimal treatment: a pure-white face inside a single thin royal-blue
+ * keyline, an interlocking "DS" script monogram in a slim oval, the couple's
+ * names in a formal roundhand calligraphy, and royal-blue type throughout with
+ * no ornament. Hebrew-primary; English appears only for the couple's names and
+ * the "are getting married" subtitle. Every Hebrew line is set `dir="rtl"`.
  */
 export function InvitationCard() {
-  // "SHOVAL & DANIEL" → stacked focal treatment on the narrow card.
-  const names = content.namesEn.split(/\s*&\s*/);
-  const stacked = names.length === 2;
+  const dateParts = content.date.split(".");
 
   return (
-    <div className="relative flex flex-col items-center gap-2.5 px-7 py-8 text-ink">
-      {/* בס״ד — upper-right corner */}
-      <span
-        dir="rtl"
-        className="font-hebrew absolute right-4 top-3 text-[11px] tracking-wide text-ink-soft"
-      >
-        {content.bsd}
-      </span>
+    <div className="relative bg-white px-9 py-10 sm:px-10 sm:py-11">
+      {/* Single thin royal-blue frame hugging the card */}
+      <div
+        className="pointer-events-none absolute inset-[13px] rounded-[2px] border"
+        style={{ borderColor: BLUE }}
+      />
 
-      {/* Opening verse */}
-      <p
-        dir="rtl"
-        className="font-hebrew mt-1 max-w-[15rem] text-center text-[13px] leading-relaxed text-ink-soft"
-      >
-        {content.verse}
-      </p>
+      {/* Content column */}
+      <div className="relative flex flex-col items-center gap-4 px-2">
+        {/* Monogram — the crowning mark */}
+        <Monogram monogram={content.envelope.monogram} />
 
-      {/* Botanical sprig — the single permitted illustration */}
-      <FloralSprig size={58} className="opacity-90" />
+        {/* Opening verse */}
+        <p
+          dir="rtl"
+          className="font-hebrew max-w-[19rem] text-center text-[13.5px] leading-relaxed"
+          style={{ color: BLUE }}
+        >
+          &ldquo;{content.verse}&rdquo;
+        </p>
 
-      {/* Couple's names — the centerpiece */}
-      <h1 className="font-display flex flex-col items-center text-ink">
-        {stacked ? (
-          <>
-            <span className="text-[2.35rem] font-medium uppercase leading-[1.02] tracking-[0.16em] sm:text-[2.6rem]">
-              {names[0]}
+        {/* Couple's names — the centerpiece, one line of calligraphy script */}
+        <h1
+          className="font-script leading-none"
+          style={{ color: BLUE, fontSize: "3.4rem" }}
+        >
+          {titleCase(content.namesEn)}
+        </h1>
+
+        {/* Subtitle — letter-spaced serif caps */}
+        <p
+          className="text-[12px] uppercase tracking-[0.3em]"
+          style={{ color: BLUE_SOFT }}
+        >
+          {content.subtitleEn}
+        </p>
+
+        {/* Invitation body */}
+        <div dir="rtl" className="font-hebrew mt-2 text-center">
+          <p className="text-[16px] font-semibold leading-relaxed" style={{ color: BLUE }}>
+            {content.invite[0]}
+          </p>
+          <p className="mt-2 text-[13px] leading-relaxed" style={{ color: BLUE_SOFT }}>
+            {content.invite[1]}
+          </p>
+        </div>
+
+        {/* Venue — lead-in, name, then city */}
+        <div className="text-center">
+          <p dir="rtl" className="font-hebrew text-[13px]" style={{ color: BLUE_SOFT }}>
+            {content.venue.lead}
+          </p>
+          <p
+            dir="rtl"
+            className="font-hebrew mt-2 text-[1.35rem] tracking-[0.12em]"
+            style={{ color: BLUE }}
+          >
+            {content.venue.name}
+          </p>
+          <p dir="rtl" className="font-hebrew mt-1.5 text-[15px]" style={{ color: BLUE }}>
+            {content.venue.place}
+          </p>
+        </div>
+
+        {/* Date — large, letter-spaced, thin pipe separators */}
+        <p
+          className="mt-1 flex items-center gap-3 text-[1.7rem] font-medium tracking-[0.15em]"
+          style={{ color: BLUE }}
+        >
+          {dateParts.map((part, i) => (
+            <span key={i} className="flex items-center gap-3">
+              {i > 0 && <span className="text-[1.3rem] font-thin opacity-60">|</span>}
+              {part}
             </span>
-            <span className="my-0.5 text-xl font-normal text-gold">&amp;</span>
-            <span className="text-[2.35rem] font-medium uppercase leading-[1.02] tracking-[0.16em] sm:text-[2.6rem]">
-              {names[1]}
-            </span>
-          </>
-        ) : (
-          <span className="text-[2rem] font-medium uppercase leading-tight tracking-[0.14em]">
-            {content.namesEn}
-          </span>
-        )}
-      </h1>
-
-      {/* Handwritten subtitle */}
-      <p className="font-script text-[1.6rem] leading-none text-gold">
-        {content.subtitleEn}
-      </p>
-
-      <Divider />
-
-      {/* Invitation body */}
-      <div dir="rtl" className="font-hebrew text-center text-ink">
-        <p className="text-[15px] leading-relaxed">{content.invite[0]}</p>
-        <p className="mt-1 text-[13px] leading-relaxed text-ink-soft">
-          {content.invite[1]}
+          ))}
         </p>
-      </div>
 
-      {/* Date — prominent */}
-      <p className="font-display text-[1.55rem] tracking-[0.14em] text-ink">
-        {content.date}
-      </p>
-
-      {/* Venue */}
-      <div className="text-center">
-        <p className="font-display text-[0.95rem] tracking-[0.12em] text-gold">
-          {content.venue.name}
-        </p>
-        <p dir="rtl" className="font-hebrew mt-1 text-[13px] text-ink-soft">
-          {content.venue.place}
-        </p>
-      </div>
-
-      {/* Event times — one balanced line */}
-      <p dir="rtl" className="font-hebrew text-center text-[13px] text-ink">
-        {content.times}
-      </p>
-
-      {/* Closing */}
-      <p dir="rtl" className="font-hebrew text-[13px] text-sage">
-        {content.closing}
-      </p>
-
-      <Divider />
-
-      {/* Parents — two balanced columns (dir=rtl → bride on the right) */}
-      <div dir="rtl" className="font-hebrew flex w-full justify-between gap-4 px-1 text-center">
-        <ParentColumn
-          label={content.parents.bride.label}
-          names={content.parents.bride.names}
-        />
-        <ParentColumn
-          label={content.parents.groom.label}
-          names={content.parents.groom.names}
-        />
+        {/* Parents — two balanced columns (dir=rtl → bride on the right) */}
+        <div
+          dir="rtl"
+          className="font-hebrew mt-4 flex w-full justify-between gap-4 px-1 text-center"
+        >
+          <ParentColumn
+            label={content.parents.bride.label}
+            names={content.parents.bride.names}
+          />
+          <ParentColumn
+            label={content.parents.groom.label}
+            names={content.parents.groom.names}
+          />
+        </div>
       </div>
     </div>
   );

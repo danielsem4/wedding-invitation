@@ -1,15 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  /* Warm ivory / champagne-linen palette */
-  --cream: #f7f1e6;
-  --cream-deep: #ece0cc;
-  --ink: #302e29;
-  --ink-soft: #6b6459;
-  --gold: #b8912f;
-  --gold-soft: #e0c88f;
-  --sage: #9caf88;
-  --paper: #fffdf8;
+  /* Toile de Jouy: cobalt-navy monochrome on a cream/ivory ground. The
+     gold-family variable *names* are kept (referenced everywhere as text-gold
+     etc.); only their values move from warm gold to cobalt blue. */
+  --cream: #f3efe3; /* cool ivory base */
+  --cream-deep: #e5ddca; /* vignette edge */
+  --ink: #223a6b; /* primary text — deep navy engraving line */
+  --ink-soft: #4a5f96; /* secondary slate-blue */
+  --gold: #2c4c9c; /* main cobalt accent */
+  --gold-soft: #a9b9dc; /* soft cornflower hairlines / thin frame */
+  --gold-deep: #1c3160; /* names / deep frame line */
+  --sage: #4863a5; /* leaf / branch strokes (mid blue) */
+  --paper: #f9f6ee; /* near-white cool cream highlight */
+
+  /* Toile engraving line-art (revived for the pastoral scene vignette) */
+  --toile: #2c4c9c; /* engraved scene line */
+  --toile-soft: #6f86bf; /* engraved scene haze / soft line */
+  --wax: #ece0c7; /* cream wax base */
+  --wax-hi: #f6efdd; /* wax highlight */
+  --wax-shade: #d3c19c; /* wax shadow tone */
+  --paper-warm: #f5ecda; /* ivory envelope paper */
 }
 
 @theme inline {
@@ -19,8 +30,13 @@
   --color-ink-soft: var(--ink-soft);
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
   --color-sage: var(--sage);
   --color-paper: var(--paper);
+  --color-toile: var(--toile);
+  --color-toile-soft: var(--toile-soft);
+  --color-wax: var(--wax);
+  --color-paper-warm: var(--paper-warm);
   --font-serif: var(--font-serif);
   --font-hebrew: var(--font-hebrew);
   --font-display: var(--font-display);
@@ -34,23 +50,61 @@ body {
   font-family: var(--font-serif), Georgia, serif;
   /* Prevent horizontal scroll from decorative florals */
   overflow-x: hidden;
+  /* No grey flash when tapping the envelope / controls on touch devices */
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Warm champagne-linen backdrop: a soft diagonal shaft of window light
-   over a radial vignette, evoking the flat-lay's natural sunlight. */
+/* ── Mobile-first: fluidly fit the fixed-size invitation stage ───────────
+   The stage is a fixed 520×1040 px box. Rather than shrink it with static
+   breakpoints, scale it to whatever the device gives us. The component
+   measures the viewport and supplies the numeric scale `--s` (clamped to a
+   readable floor on small phones — we'd rather let the open card scroll than
+   go tiny — and a 1× ceiling on desktop) plus the stage size `--stage-w/h`.
+   The wrapper's *layout* box takes the scaled size so the page reserves the
+   right space and centers correctly; the inner box is the true-size stage,
+   scaled from its top-left corner. */
+.stage-fit {
+  width: calc(var(--stage-w) * 1px * var(--s));
+  height: calc(var(--stage-h) * 1px * var(--s));
+}
+.stage-fit > .stage-inner {
+  transform: scale(var(--s));
+  transform-origin: top left;
+}
+
+/* Mobile-first page shell: fill the small viewport and center the invitation.
+   `align-content: safe center` centers when it fits but top-aligns (never
+   clips the top) when the open card is taller than the screen, so the page
+   just scrolls. Padding honours device safe-areas (notches/home indicator). */
+.scene-shell {
+  display: grid;
+  min-block-size: 100svh;
+  justify-items: center;
+  align-content: safe center;
+  padding: max(0.75rem, env(safe-area-inset-top))
+    max(0.5rem, env(safe-area-inset-right))
+    max(0.75rem, env(safe-area-inset-bottom))
+    max(0.5rem, env(safe-area-inset-left));
+}
+@media (min-width: 640px) {
+  .scene-shell {
+    padding: max(2.5rem, env(safe-area-inset-top))
+      max(1rem, env(safe-area-inset-right))
+      max(2.5rem, env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+  }
+}
+
+/* Blue toile wallpaper: the pastoral engraving tiled edge-to-edge, softened by
+   a translucent cream veil so the pattern recedes and the envelope stays crisp. */
 .scene-bg {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 253, 248, 0.55) 0%,
-      rgba(255, 253, 248, 0) 42%
-    ),
-    radial-gradient(
-      120% 90% at 50% 28%,
-      var(--paper) 0%,
-      var(--cream) 46%,
-      var(--cream-deep) 100%
-    );
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(rgba(249, 246, 238, 0.7), rgba(243, 239, 227, 0.74)),
+    url("/toile-bg.jpg");
+  background-repeat: no-repeat, repeat;
+  background-position: center, top center;
+  background-size: auto, 520px auto;
 }
 
 .font-hebrew {
@@ -61,8 +115,9 @@ body {
   font-family: var(--font-display), var(--font-serif), Georgia, serif;
 }
 
+/* Formal roundhand calligraphy — the couple's names + the "DS" monogram. */
 .font-script {
-  font-family: var(--font-script), "Segoe Script", cursive;
+  font-family: var(--font-script), var(--font-serif), Georgia, serif;
 }
 
 /* Gentle idle float for the closed envelope */
